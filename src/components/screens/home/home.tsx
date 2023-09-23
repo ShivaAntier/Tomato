@@ -1,5 +1,14 @@
-import React from 'react';
-import {Text, View, StyleSheet, useColorScheme} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  useColorScheme,
+  BackHandler,
+  Alert,
+  Image,
+  ScrollView,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -11,25 +20,60 @@ function Home() {
   const backgroundStyle: any = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  });
+
   return (
-    <View style={[style.container, backgroundStyle]}>
-      <Text style={[textColor]}>adfadsfadfadsf</Text>
-    </View>
+    <ScrollView>
+      <View>
+        <Image
+          style={[style.logo]}
+          source={require('../../../images/Splash.png')}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     //   backgroundColor: '#001123',
   },
   whiteText: {
-    color: 'White',
+    backgroundColor: 'green',
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: 100,
   },
   blackText: {
-    color: 'Black',
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 100,
+  },
+  logo: {
+    height: 90,
+    width: 90,
+    resizeMode: 'contain',
   },
 });
 
